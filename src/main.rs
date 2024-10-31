@@ -16,7 +16,7 @@ fn main() {
         "extract" => {
             // Set URL and file paths for extraction
             let url = "https://raw.githubusercontent.com/fivethirtyeight/data/refs/heads/master/candy-power-ranking/candy-data.csv";
-            let file_path = "data/serve_times.csv";
+            let file_path = "data/candy-data.csv";
             let directory = "data";
 
             if let Err(err) = extract(url, file_path, directory) {
@@ -51,7 +51,7 @@ fn main() {
                 process::exit(1);
             }
             let sql_query = &args[2];
-            let csv_path = "data/serve_times.csv"; // Default CSV file path for loading data
+            let csv_path = "data/candy-data.csv"; 
 
             match transform_load(csv_path) {
                 Ok(conn) => {

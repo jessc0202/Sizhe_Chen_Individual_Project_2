@@ -1,10 +1,11 @@
+# Check Rust command-line utility versions
 rust-version:
 	@echo "Rust command-line utility versions:"
 	rustc --version              # Rust compiler
 	cargo --version              # Rust package manager
 	rustfmt --version            # Rust code formatter
 	rustup --version             # Rust toolchain manager
-	clippy-driver --version      # Rust linter
+	clippy-driver --version || echo "Clippy not installed"  # Rust linter
 
 # Format code using rustfmt
 format:
@@ -16,7 +17,7 @@ lint:
 
 # Run tests
 test:
-	cargo test --quiet
+	cargo test
 
 # Build and run the project
 run:
@@ -28,7 +29,7 @@ release:
 
 # Install Rust toolchain if needed
 install:
-	# Install if needed
+	# Uncomment below to update rust toolchain
 	# @echo "Updating rust toolchain"
 	# rustup update stable
 	# rustup default stable 
@@ -38,11 +39,13 @@ all: format lint test run
 
 # Custom tasks for specific project actions
 extract: 
-	cargo run extract
+	cargo run -- extract data/candy-data.csv
+
 # Transform and Load data
 transform_load:
-	cargo run -- transform_load
+	cargo run -- transform_load data/candy-data.csv
 
+# Example: Create a database entry
 create:
 	cargo run -- query "INSERT INTO CandyData (competitorname, chocolate, fruity, caramel, peanutyalmondy, nougat, crispedricewafer, hard, bar, pluribus, sugarpercent, pricepercent, winpercent) VALUES ('Sample Candy', 1, 0, 1, 0, 0, 1, 0, 1, 0, 0.5, 0.3, 75.0);"
 

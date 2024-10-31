@@ -4,6 +4,7 @@ use anyhow::Result;
 use std::fs::{self, File, OpenOptions};
 use std::io::{BufRead, BufReader, Write};
 
+
 const LOG_FILE: &str = "query_log.md";
 
 // Function to log queries in a markdown file
@@ -19,15 +20,25 @@ fn log_query(query: &str, log_file: &str) {
 
 // Function to download a file from a URL
 pub fn extract(url: &str, file_path: &str, directory: &str) -> Result<()> {
+    // Check if the directory exists; if not, create it
     if fs::metadata(directory).is_err() {
-        fs::create_dir_all(directory).expect("Failed to create directory");
+        fs::create_dir_all(directory)?;
     }
 
+    // Create a blocking client to send the HTTP request
     let client = Client::new();
-    let mut response = client.get(url).send().expect("Failed to send request");
-    let mut file = File::create(file_path).expect("Failed to create file");
+    let mut response = client.get(url).send()?;
+    
+    // Check if the response is successful
+    if !response.status().is_success() {
+        return Err(anyhow::anyhow!("Failed to download file: HTTP {}", response.status()));
+    }
 
-    std::io::copy(&mut response, &mut file).expect("Failed to copy content");
+    // Create the file at the specified file_path
+    let mut file = File::create(file_path)?;
+    
+    // Copy the response content into the file
+    std::io::copy(&mut response, &mut file)?;
 
     println!("Extraction successful!");
     Ok(())
@@ -35,9 +46,7 @@ pub fn extract(url: &str, file_path: &str, directory: &str) -> Result<()> {
 
 // Load data from a CSV file into an SQLite database
 pub fn transform_load(csv_path: &str) -> Result<Connection> {
-    let conn = Connection::open("CandyDataDB.db")?; // Create a file-based SQLite database
-
-    // Create the CandyData table
+    let conn = Connection::open("CandyDataDB.db")?; 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS CandyData (
             competitorname TEXT,
