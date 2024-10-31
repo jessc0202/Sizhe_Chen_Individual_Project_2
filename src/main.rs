@@ -2,7 +2,7 @@ use std::env;
 use std::process;
 
 // Import the functions from `lib.rs` using the crate name
-use sizhe_chen_individual_project_2::{extract, transform_load, query};
+use sizhe_chen_individual_project_2::{extract, query, transform_load};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -51,7 +51,7 @@ fn main() {
                 process::exit(1);
             }
             let sql_query = &args[2];
-            let csv_path = "data/candy-data.csv"; 
+            let csv_path = "data/candy-data.csv";
 
             match transform_load(csv_path) {
                 Ok(conn) => {

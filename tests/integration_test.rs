@@ -1,4 +1,4 @@
-use sizhe_chen_individual_project_2::{extract, transform_load, query};
+use sizhe_chen_individual_project_2::{extract, query, transform_load};
 
 #[test]
 fn test_transform_load() {
@@ -6,7 +6,7 @@ fn test_transform_load() {
     let url = "https://raw.githubusercontent.com/fivethirtyeight/data/master/candy-power-ranking/candy-data.csv";
     let file_path = "data/candy-data.csv";
     let directory = "data";
-    
+
     extract(url, file_path, directory).expect("Failed to extract data");
 
     // Run the transform_load function
@@ -55,7 +55,8 @@ fn test_query_insert_update_delete() {
     assert!(select_result.is_ok(), "Failed to select data");
 
     // Test UPDATE
-    let update_query = "UPDATE CandyData SET winpercent = 80.0 WHERE competitorname = 'Test Candy';";
+    let update_query =
+        "UPDATE CandyData SET winpercent = 80.0 WHERE competitorname = 'Test Candy';";
     let update_result = query(&conn, update_query);
     assert!(update_result.is_ok(), "Failed to update data");
 

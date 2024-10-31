@@ -1,9 +1,8 @@
-use rusqlite::{params, Connection};
-use reqwest::blocking::Client;
 use anyhow::Result;
+use reqwest::blocking::Client;
+use rusqlite::{params, Connection};
 use std::fs::{self, File, OpenOptions};
 use std::io::{BufRead, BufReader, Write};
-
 
 const LOG_FILE: &str = "query_log.md";
 
@@ -28,15 +27,18 @@ pub fn extract(url: &str, file_path: &str, directory: &str) -> Result<()> {
     // Create a blocking client to send the HTTP request
     let client = Client::new();
     let mut response = client.get(url).send()?;
-    
+
     // Check if the response is successful
     if !response.status().is_success() {
-        return Err(anyhow::anyhow!("Failed to download file: HTTP {}", response.status()));
+        return Err(anyhow::anyhow!(
+            "Failed to download file: HTTP {}",
+            response.status()
+        ));
     }
 
     // Create the file at the specified file_path
     let mut file = File::create(file_path)?;
-    
+
     // Copy the response content into the file
     std::io::copy(&mut response, &mut file)?;
 
@@ -46,7 +48,7 @@ pub fn extract(url: &str, file_path: &str, directory: &str) -> Result<()> {
 
 // Load data from a CSV file into an SQLite database
 pub fn transform_load(csv_path: &str) -> Result<Connection> {
-    let conn = Connection::open("CandyDataDB.db")?; 
+    let conn = Connection::open("CandyDataDB.db")?;
     conn.execute(
         "CREATE TABLE IF NOT EXISTS CandyData (
             competitorname TEXT,
@@ -97,7 +99,7 @@ pub fn transform_load(csv_path: &str) -> Result<Connection> {
             ],
         )?;
     }
-    
+
     println!("Data loaded into database successfully.");
     Ok(conn)
 }
@@ -112,7 +114,10 @@ pub fn query(conn: &Connection, sql_query: &str) -> Result<()> {
         while let Some(row) = rows.next()? {
             let competitorname: String = row.get(0)?;
             let winpercent: f64 = row.get(12)?;
-            println!("Competitor: {}, Win Percent: {}", competitorname, winpercent);
+            println!(
+                "Competitor: {}, Win Percent: {}",
+                competitorname, winpercent
+            );
         }
     } else {
         // For other operations (INSERT, UPDATE, DELETE)
