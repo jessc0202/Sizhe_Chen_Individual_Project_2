@@ -42,13 +42,6 @@ all: format lint test run
 transform_load:
 	cargo run -- transform_load
 
-# Run a custom SQL query (Replace with actual query as needed)
-query:
-	@echo "Running a custom SQL query..."
-	# Replace with your actual query below or pass it as an argument
-	cargo run -- query "SELECT * FROM CandyData WHERE chocolate = 1 AND winpercent > 50"
-
-# Example: Create a database entry
 create:
 	cargo run -- query "INSERT INTO CandyData (competitorname, chocolate, fruity, caramel, peanutyalmondy, nougat, crispedricewafer, hard, bar, pluribus, sugarpercent, pricepercent, winpercent) VALUES ('Sample Candy', 1, 0, 1, 0, 0, 1, 0, 1, 0, 0.5, 0.3, 75.0);"
 
