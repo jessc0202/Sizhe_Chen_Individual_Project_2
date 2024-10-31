@@ -61,3 +61,14 @@ update:
 delete:
 	cargo run -- query "DELETE FROM CandyData WHERE competitorname='Sample Candy';"
 
+# Generate and push changes to GitHub
+generate_and_push:
+	@if [ -n "$$(git status --porcelain)" ]; then \
+		git config --local user.email "action@github.com"; \
+		git config --local user.name "GitHub Action"; \
+		git add .; \
+		git commit -m "Add query log"; \
+		git push; \
+	else \
+		echo "No changes to commit. Skipping commit and push."; \
+	fi
