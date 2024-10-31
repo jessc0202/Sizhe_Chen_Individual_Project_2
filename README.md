@@ -5,6 +5,9 @@
 ## Project Overview
 This project provides a set of Rust-based tools to interact with and manage a database of candy rankings data. The project includes functionalities to extract, load, and query data from a CSV file into an SQLite database, making it easy to analyze and manipulate candy data.
 
+## Youtube Video Link 
+[Youtube Link](https://www.youtube.com/watch?v=EgYJHipwlsw)
+
 ## Features
 
 - **Data Extraction**: Downloads a CSV file from a specified URL and saves it locally.
@@ -40,7 +43,7 @@ This project provides a set of Rust-based tools to interact with and manage a da
 ### Check Format and Test Errors: 
 1. Format code `make format`
 2. Lint code `make lint`
-3. Test coce `make test`
+3. Test code `make test`
 
 ### Optimized Rust Binary
 1. You can find and download the uploaded artifact by going to `actions` and clicking on the latest workflow run
