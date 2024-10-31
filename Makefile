@@ -37,7 +37,8 @@ install:
 all: format lint test run
 
 # Custom tasks for specific project actions
-
+extract: 
+	cargo run extract
 # Transform and Load data
 transform_load:
 	cargo run -- transform_load
