@@ -43,7 +43,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: optimized-binary
-        path: target/release/sizhe_chen_individual_project_2
+        path: target/release/Sizhe_Chen_Individual_Project_2
     - name: pull repository
       run: git pull
     - name: add rust logs
