@@ -1,5 +1,5 @@
 use sizhe_chen_individual_project_2::{transform_load, query};
-use std::fs;
+
 
 #[test]
 fn test_transform_load() {

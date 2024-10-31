@@ -2,7 +2,7 @@ use std::env;
 use std::process;
 
 // Import the functions from `lib.rs` using the crate name
-use sizhe_chen_individual_project_2::{transform_load, query};
+use sizhe_chen_individual_project_2::{extract, transform_load, query};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -13,7 +13,21 @@ fn main() {
 
     let action = &args[1];
     match action.as_str() {
+        "extract" => {
+            // Set URL and file paths for extraction
+            let url = "https://raw.githubusercontent.com/fivethirtyeight/data/refs/heads/master/candy-power-ranking/candy-data.csv";
+            let file_path = "data/serve_times.csv";
+            let directory = "data";
+
+            if let Err(err) = extract(url, file_path, directory) {
+                eprintln!("Error extracting data: {:?}", err);
+                process::exit(1);
+            } else {
+                println!("Extraction successful!");
+            }
+        }
         "transform_load" => {
+            // Load data from a specified CSV file into the database
             if args.len() < 3 {
                 eprintln!("Usage: {} transform_load [CSV file path]", args[0]);
                 process::exit(1);
@@ -31,17 +45,21 @@ fn main() {
             }
         }
         "query" => {
-            if args.len() < 4 {
-                eprintln!("Usage: {} query [CSV file path] [SQL query]", args[0]);
+            // Execute a SQL query on the database
+            if args.len() < 3 {
+                eprintln!("Usage: {} query [SQL query]", args[0]);
                 process::exit(1);
             }
-            let csv_path = &args[2];
-            let sql_query = &args[3];
+            let sql_query = &args[2];
+            let csv_path = "data/serve_times.csv"; // Default CSV file path for loading data
+
             match transform_load(csv_path) {
                 Ok(conn) => {
                     if let Err(err) = query(&conn, sql_query) {
                         eprintln!("Error executing query: {:?}", err);
                         process::exit(1);
+                    } else {
+                        println!("Query executed successfully!");
                     }
                 }
                 Err(err) => {
@@ -51,7 +69,7 @@ fn main() {
             }
         }
         _ => {
-            eprintln!("Invalid action. Use 'transform_load' or 'query'.");
+            eprintln!("Invalid action. Use 'extract', 'transform_load', or 'query'.");
             process::exit(1);
         }
     }
